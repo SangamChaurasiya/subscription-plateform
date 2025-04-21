@@ -20,6 +20,14 @@
 
         <br><br>
 
+        {% if article.is_premium == True %}
+            ⭐<strong> Premium </strong>
+        {% elif article.is_premium == False %}
+            <strong> Standard </strong>
+        {% endif %}
+
+        <hr>
+
         <a href="{% url 'update-article' article.id %}" class="btn btn-success">Update Article</a>
         <a href="{% url 'delete-article' article.id %}" class="btn btn-danger">Delete Article</a>
     </div>
