@@ -3,9 +3,7 @@ from .managers import CustomUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils import timezone
 
-# User1 Creds: sangam.chaurasiya@gmail.com admin
-# User2 Creds: writer@gmail.com User@1234
-# User3 Creds: client@gmail.com User@1234
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = None
     email = models.EmailField(unique=True)

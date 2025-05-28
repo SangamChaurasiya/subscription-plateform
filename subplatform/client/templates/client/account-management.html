@@ -1,0 +1,23 @@
+{% extends 'client/navbar.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <br>
+
+    <div class="container bg-white shadow-md p-5 form-layout text-center">
+        
+        <h5>Browse subscription plans</h5>
+        
+        <hr>
+
+        <a class="btn btn-success" type="button" href="{% url 'subscription-plans' %}">
+            View subscription plans
+        </a>
+
+    </div>
+
+    <br>
+
+{% endblock content %}
