@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from writer.models import Article
 from .models import Subscription
 from account.models import CustomUser
+from .paypal import *
 
 
 @login_required(login_url='my-login')
@@ -48,7 +49,16 @@ def subscription_plans(request):
 
 @login_required(login_url='my-login')
 def client_account_management(request):
-    return render(request, 'client/account-management.html')
+    try:
+        subDetails = Subscription.objects.get(user=request.user)
+
+        subscription_id = subDetails.paypal_subscription_id
+
+        context = {'SubscriptionID': subscription_id}
+
+        return render(request, 'client/account-management.html', context)
+    except:
+        return render(request, 'client/account-management.html')
 
 
 @login_required(login_url='my-login')
@@ -81,3 +91,17 @@ def create_subscription(request, subID, plan):
     }
 
     return render(request, 'client/create-subscription.html', context)
+
+
+@login_required(login_url='my-login')
+def delete_subscription(request, subID):
+    # Delete Subscription from Paypal
+    access_token = get_access_token()
+    cancel_subscription_paypal(access_token, subID)
+
+    # Delete a subscription from Django (application side)
+    subscription = Subscription.objects.get(user=request.user, paypal_subscription_id=subID)
+
+    subscription.delete()
+
+    return render(request, 'client/delete-subscription.html')

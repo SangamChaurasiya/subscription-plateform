@@ -6,17 +6,49 @@
 
     <br>
 
+    <!-- Browse Subscription Plans -->
     <div class="container bg-white shadow-md p-5 form-layout text-center">
         
         <h5>Browse subscription plans</h5>
         
         <hr>
 
+        <p> Check all the available subscription plans: </p>
+
+        <br>
+
         <a class="btn btn-success" type="button" href="{% url 'subscription-plans' %}">
             View subscription plans
         </a>
 
     </div>
+
+    <br>
+
+    {% if SubscriptionID %}
+
+        <!-- Cancel/Delete Subscription -->
+        <div class="container bg-white shadow-md p-5 form-layout text-center">
+            
+            <h5>Delete your subscription</h5>
+            
+            <hr>
+            
+            <p> Permanently delete your subscription by clicking the button below: </p>
+
+            <br>
+
+            <a class="btn btn-danger" type="button" href="{% url 'delete-subscription' SubscriptionID %}">
+                Delete subscription
+            </a>
+
+        </div>
+
+    {% else %}
+
+    <!-- Display nothing if there is no valid subscription ID -->
+
+    {% endif %}
 
     <br>
 
