@@ -4,6 +4,7 @@ from writer.models import Article
 from .models import Subscription
 from account.models import CustomUser
 from .paypal import *
+from django.http import HttpResponse
 
 
 @login_required(login_url='my-login')
@@ -105,3 +106,47 @@ def delete_subscription(request, subID):
     subscription.delete()
 
     return render(request, 'client/delete-subscription.html')
+
+
+@login_required(login_url='my-login')
+def update_subscription(request, subID):
+    access_token = get_access_token()
+
+    # approve_link = Hateoas link from PayPal
+    approve_link = update_subscription_paypal(access_token, subID)
+
+    if approve_link:
+        return redirect(approve_link)
+    else:
+        return HttpResponse("Unable to obtain the approval link")
+
+
+@login_required(login_url='my-login')
+def paypal_update_sub_confirmed(request):
+    try:
+        subDetails = Subscription.objects.get(user=request.user)
+
+        subscriptionID = subDetails.paypal_subscription_id
+
+        context = {'SubscriptionID': subscriptionID}
+
+        return render(request, 'client/paypal-update-sub-confirmed.html', context)
+    except:
+        return render(request, 'client/paypal-update-sub-confirmed.html')
+
+
+@login_required(login_url='my-login')
+def django_update_sub_confirmed(request, subID):
+    access_token = get_access_token()
+    current_plan_id = get_current_subscription(access_token, subID)
+
+    if current_plan_id == 'P-7N696059RW0249717NA6ASGI': # Standard
+        new_plan_name = "Standard"
+        new_cost = "4.99"
+        Subscription.objects.filter(paypal_subscription_id=subID).update(subscription_plan=new_plan_name, subscription_cost=new_cost)
+    elif current_plan_id == 'P-89123770D94123627NA6ATCY': # Premium
+        new_plan_name = "Premium"
+        new_cost = "9.99"
+        Subscription.objects.filter(paypal_subscription_id=subID).update(subscription_plan=new_plan_name, subscription_cost=new_cost)
+
+    return render(request, 'client/django-update-sub-confirmed.html')
