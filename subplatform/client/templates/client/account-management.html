@@ -7,21 +7,28 @@
     <br>
 
     <!-- Browse Subscription Plans -->
-    <div class="container bg-white shadow-md p-5 form-layout text-center">
-        
-        <h5>Browse subscription plans</h5>
-        
-        <hr>
 
-        <p> Check all the available subscription plans: </p>
+    {% if SubscriptionID %}
 
-        <br>
+        <!-- If there is SubscriptionID then display no subscription plans (link) -->
 
-        <a class="btn btn-success" type="button" href="{% url 'subscription-plans' %}">
-            View subscription plans
-        </a>
+    {% else %}
+        <div class="container bg-white shadow-md p-5 form-layout text-center">
+            
+            <h5>Browse subscription plans</h5>
+            
+            <hr>
 
-    </div>
+            <p> Check all the available subscription plans: </p>
+
+            <br>
+
+            <a class="btn btn-success" type="button" href="{% url 'subscription-plans' %}">
+                View subscription plans
+            </a>
+
+        </div>
+    {% endif %}
 
     <br>
 
@@ -38,7 +45,7 @@
 
             <br>
 
-            <a class="btn btn-info" type="button" href="{% url 'update-subscription' SubscriptionID %}">
+            <a id="updateButton" class="btn btn-info" type="button" href="{% url 'update-subscription' SubscriptionID %}">
                 Update subscription
             </a>
 
@@ -57,7 +64,7 @@
 
             <br>
 
-            <a class="btn btn-danger" type="button" href="{% url 'delete-subscription' SubscriptionID %}">
+            <a id="deleteButton" class="btn btn-danger" type="button" href="{% url 'delete-subscription' SubscriptionID %}">
                 Delete subscription
             </a>
 
@@ -70,5 +77,21 @@
     {% endif %}
 
     <br>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        $(document).ready(function (){
+            $("#deleteButton").on("click", function(){
+                $(this).text("Processing...");
+            });
+        })
+
+        $(document).ready(function (){
+            $("#updateButton").on("click", function(){
+                $(this).text("Processing...");
+            });
+        })
+    </script>
 
 {% endblock content %}
