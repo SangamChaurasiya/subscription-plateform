@@ -17,7 +17,7 @@ def register(request):
         if form.is_valid():
             form.save()
 
-            return redirect('my-login')
+            return redirect('account:my-login')
         
     context = {'RegisterForm': form}
     return render(request, 'account/register.html', context=context)
@@ -35,11 +35,11 @@ def my_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None and user.is_writer == True:
                 login(request, user)
-                return redirect('writer-dashboard')
+                return redirect('writer:dashboard')
             
             if user is not None and user.is_writer == False:
                 login(request, user)
-                return redirect('client-dashboard')
+                return redirect('client:dashboard')
 
     context = {'LoginForm': form}
     return render(request, 'account/my-login.html', context)
@@ -48,4 +48,4 @@ def my_login(request):
 def user_logout(request):
     logout(request)
     
-    return redirect('my-login')
+    return redirect('account:my-login')

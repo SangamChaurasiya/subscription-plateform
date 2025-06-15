@@ -6,12 +6,12 @@ from .models import Article
 from account.models import CustomUser
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def writer_dashboard(request):
     return render(request, 'writer/writer-dashboard.html')
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def create_article(request):
     form = ArticleForm()
 
@@ -22,12 +22,12 @@ def create_article(request):
             article.user = request.user
             article.save()
 
-            return redirect('my-articles')
+            return redirect('writer:my-articles')
     context = {'CreateArticleForm': form}
     return render(request, 'writer/create-article.html', context=context)
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def my_articles(request):
     current_user = request.user.id
 
@@ -38,14 +38,14 @@ def my_articles(request):
     return render(request, 'writer/my-articles.html', context=context)
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def update_article(request, pk):
     current_user = request.user.id
 
     try:
         article = Article.objects.get(user=current_user, id=pk)
     except:
-        return redirect('my-articles')
+        return redirect('writer:my-articles')
 
     form = ArticleForm(instance=article)
 
@@ -55,34 +55,34 @@ def update_article(request, pk):
         if form.is_valid():
             form.save()
 
-            return redirect('my-articles')
+            return redirect('writer:my-articles')
         
     context = {'UpdateArticleForm': form}
 
     return render(request, 'writer/update-article.html', context=context)
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def delete_article(request, pk):
     current_user = request.user.id
 
     try:
         article = Article.objects.get(user=current_user, id=pk)
     except:
-        return redirect('my-articles')
+        return redirect('writer:my-articles')
     
     form = ArticleForm(instance=article)
 
     if request.method == "POST":
         article.delete()
-        return redirect('my-articles')
+        return redirect('writer:my-articles')
         
     context = {'DeleteArticleForm': form}
 
     return render(request, 'writer/delete-article.html', context=context)
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def account_management(request):
     form = UpdateUserForm(instance=request.user)
 
@@ -92,21 +92,19 @@ def account_management(request):
         if form.is_valid():
             form.save()
 
-            return redirect('writer-dashboard')
+            return redirect('writer:dashboard')
         
     context = {'UserUpdateForm': form}
         
     return render(request, 'writer/account-management.html', context=context)
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def delete_account(request):
     if request.method == "POST":
         deleteUser = CustomUser.objects.get(email=request.user)
         deleteUser.delete()
 
-        return redirect('my-login')
+        return redirect('account:my-login')
     
     return render(request, 'writer/delete-account.html')
-
-

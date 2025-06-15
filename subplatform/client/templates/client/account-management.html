@@ -1,8 +1,23 @@
 {% extends 'client/navbar.html' %}
 
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
+
+    <br>
+
+    <div class="container bg-white shadow-md p-5 form-layout">
+        <h3>Update account details</h3>
+        <p>You may update your account details below: </p>
+        <form method="post" autocomplete="off">
+            {% csrf_token %}
+            
+            {{ UserUpdateForm|crispy }}
+            
+            <input class="btn btn-success" type="submit" value="Update Details">
+        </form>
+    </div>
 
     <br>
 
@@ -23,7 +38,7 @@
 
             <br>
 
-            <a class="btn btn-success" type="button" href="{% url 'subscription-plans' %}">
+            <a class="btn btn-success" type="button" href="{% url 'client:subscription-plans' %}">
                 View subscription plans
             </a>
 
@@ -45,7 +60,7 @@
 
             <br>
 
-            <a id="updateButton" class="btn btn-info" type="button" href="{% url 'update-subscription' SubscriptionID %}">
+            <a id="updateButton" class="btn btn-info" type="button" href="{% url 'client:update-subscription' SubscriptionID %}">
                 Update subscription
             </a>
 
@@ -64,7 +79,7 @@
 
             <br>
 
-            <a id="deleteButton" class="btn btn-danger" type="button" href="{% url 'delete-subscription' SubscriptionID %}">
+            <a id="deleteButton" class="btn btn-danger" type="button" href="{% url 'client:delete-subscription' SubscriptionID %}">
                 Delete subscription
             </a>
 
@@ -75,6 +90,16 @@
     <!-- Display nothing if there is no valid subscription ID -->
 
     {% endif %}
+
+    <br>
+
+    <div class="container bg-white shadow-md p-5 form-layout">
+        <h3>Account Deletion</h3>
+        
+        <br>
+
+        <a class="text-danger" href="{% url 'client:delete-account' %}">Delete your account</a>
+    </div>
 
     <br>
 

@@ -5,9 +5,10 @@ from .models import Subscription
 from account.models import CustomUser
 from .paypal import *
 from django.http import HttpResponse
+from .forms import UpdateUserForm
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def client_dashboard(request):
     try:
         subDetails = Subscription.objects.get(user=request.user)
@@ -19,7 +20,7 @@ def client_dashboard(request):
     return render(request, 'client/client-dashboard.html', context=context)
     
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def browse_articles(request):
     try:
         subDetails = Subscription.objects.get(user=request.user, is_active=True)
@@ -38,34 +39,59 @@ def browse_articles(request):
     return render(request, 'client/browse-articles.html', context=context)
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def subscription_locked(request):
     return render(request, 'client/subscription-locked.html')
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def subscription_plans(request):
     if not Subscription.objects.filter(user=request.user).exists():
         return render(request, 'client/subscription-plans.html')
     else:
-        return redirect('client-dashboard')
+        return redirect('client:client-dashboard')
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def client_account_management(request):
     try:
+        # Updating our account details
+        form = UpdateUserForm(instance=request.user)
+
+        if request.method == "POST":
+            form = UpdateUserForm(request.POST, instance=request.user)
+
+            if form.is_valid():
+                form.save()
+
+                return redirect('client:client-dashboard')
+
+        # Chaeck if the user has a Subscription object
         subDetails = Subscription.objects.get(user=request.user)
 
         subscription_id = subDetails.paypal_subscription_id
 
-        context = {'SubscriptionID': subscription_id}
+        # Pass through data to our template
+        context = {'SubscriptionID': subscription_id, 'UserUpdateForm': form}
 
         return render(request, 'client/account-management.html', context)
     except:
-        return render(request, 'client/account-management.html')
+        form = UpdateUserForm(instance=request.user)
+
+        if request.method == "POST":
+            form = UpdateUserForm(request.POST, instance=request.user)
+
+            if form.is_valid():
+                form.save()
+
+                return redirect('client:client-dashboard')
+            
+        context = {'UserUpdateForm': form}
+
+        return render(request, 'client/account-management.html', context)
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def create_subscription(request, subID, plan):
     if not Subscription.objects.filter(user=request.user).exists():
         custom_user = CustomUser.objects.get(email=request.user)
@@ -97,10 +123,10 @@ def create_subscription(request, subID, plan):
 
         return render(request, 'client/create-subscription.html', context)
     else:
-        return redirect('client-dashboard')
+        return redirect('client:client-dashboard')
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def delete_subscription(request, subID):
     try:
         # Delete Subscription from Paypal
@@ -113,11 +139,11 @@ def delete_subscription(request, subID):
         subscription.delete()
         return render(request, 'client/delete-subscription.html')
     except:
-        return redirect('client-dashboard')
+        return redirect('client:client-dashboard')
 
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def update_subscription(request, subID):
     access_token = get_access_token()
 
@@ -130,7 +156,7 @@ def update_subscription(request, subID):
         return HttpResponse("Unable to obtain the approval link")
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def paypal_update_sub_confirmed(request):
     try:
         subDetails = Subscription.objects.get(user=request.user)
@@ -144,7 +170,7 @@ def paypal_update_sub_confirmed(request):
         return render(request, 'client/paypal-update-sub-confirmed.html')
 
 
-@login_required(login_url='my-login')
+@login_required(login_url='account:my-login')
 def django_update_sub_confirmed(request, subID):
     access_token = get_access_token()
     current_plan_id = get_current_subscription(access_token, subID)
@@ -159,3 +185,14 @@ def django_update_sub_confirmed(request, subID):
         Subscription.objects.filter(paypal_subscription_id=subID).update(subscription_plan=new_plan_name, subscription_cost=new_cost)
 
     return render(request, 'client/django-update-sub-confirmed.html')
+
+
+@login_required(login_url='account:my-login')
+def delete_account(request):
+    if request.method == "POST":
+        deleteUser = CustomUser.objects.get(email=request.user)
+        deleteUser.delete()
+
+        return redirect('account:my-login')
+    
+    return render(request, 'client/delete-account.html')
