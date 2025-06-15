@@ -19,16 +19,26 @@
     <br>
 
     <div class="container bg-white shadow-md p-5 form-layout">
-        <h1>My login page</h1>
+        <h1>Login</h1>
+
+        <p>Proceed to login your account.</p>
+        <br>
         
         <form method="post">
             {% csrf_token %}
             
             {{ LoginForm|crispy }}
+
+            <br>
             
-            <input class="btn btn-success" type="submit" value="Login">
-            New User? <a class="text-info" href="{% url 'register' %}">Register</a>
+            <input class="btn btn-success w-100" type="submit" value="Login">
         </form>
+
+        <div class="text-center">
+            <a href="{% url 'register' %}">Don't have an account?</a>
+            <br><br>
+            <a href="{% url 'password_reset' %}">Forgotten your password?</a>
+        </div>
     </div>
 
     <br>

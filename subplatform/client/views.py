@@ -25,7 +25,7 @@ def browse_articles(request):
     try:
         subDetails = Subscription.objects.get(user=request.user, is_active=True)
     except:
-        return redirect('subscription-locked')
+        return redirect('client:subscription-locked')
     
     currentSubscriptionPlan = subDetails.subscription_plan
     
@@ -49,7 +49,7 @@ def subscription_plans(request):
     if not Subscription.objects.filter(user=request.user).exists():
         return render(request, 'client/subscription-plans.html')
     else:
-        return redirect('client:client-dashboard')
+        return redirect('client:dashboard')
 
 
 @login_required(login_url='my-login')
@@ -64,7 +64,7 @@ def client_account_management(request):
             if form.is_valid():
                 form.save()
 
-                return redirect('client:client-dashboard')
+                return redirect('client:dashboard')
 
         # Chaeck if the user has a Subscription object
         subDetails = Subscription.objects.get(user=request.user)
@@ -84,7 +84,7 @@ def client_account_management(request):
             if form.is_valid():
                 form.save()
 
-                return redirect('client:client-dashboard')
+                return redirect('client:dashboard')
             
         context = {'UserUpdateForm': form}
 
@@ -123,7 +123,7 @@ def create_subscription(request, subID, plan):
 
         return render(request, 'client/create-subscription.html', context)
     else:
-        return redirect('client:client-dashboard')
+        return redirect('client:dashboard')
 
 
 @login_required(login_url='my-login')
@@ -139,7 +139,7 @@ def delete_subscription(request, subID):
         subscription.delete()
         return render(request, 'client/delete-subscription.html')
     except:
-        return redirect('client:client-dashboard')
+        return redirect('client:dashboard')
 
 
 

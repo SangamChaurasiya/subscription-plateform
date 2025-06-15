@@ -22,17 +22,30 @@
     <div class="container bg-white shadow-md p-5 form-layout">
 
         <h1>Register</h1>
+
+        <hr>
+
+        <p>
+            Start your journey today whether you are a client or writer.
+        </p>
         
         <form method="post" autocomplete="off">
             {% csrf_token %}
             
             {{ RegisterForm|crispy }}
             
-            <input class="btn btn-success" type="submit" value="Register">
-            Already have an account? <a class="text-info" href="{% url 'my-login' %}">Login</a>
-        </form>
-    </div>
+            <br>
 
+            <input class="btn btn-success w-100" type="submit" value="Register">
+            
+        </form>
+
+        <div class="text-center">
+            <a href="{% url 'my-login' %}">Already have an account?</a>
+        </div>
+
+    </div>
+    
     <br>
 
 </html>

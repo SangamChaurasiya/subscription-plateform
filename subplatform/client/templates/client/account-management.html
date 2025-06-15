@@ -14,8 +14,10 @@
             {% csrf_token %}
             
             {{ UserUpdateForm|crispy }}
+
+            <br>
             
-            <input class="btn btn-success" type="submit" value="Update Details">
+            <input class="btn btn-success w-100 p-2" type="submit" value="Update Details">
         </form>
     </div>
 
@@ -38,7 +40,7 @@
 
             <br>
 
-            <a class="btn btn-success" type="button" href="{% url 'client:subscription-plans' %}">
+            <a class="btn btn-success w-100 p-2" type="button" href="{% url 'client:subscription-plans' %}">
                 View subscription plans
             </a>
 
@@ -60,7 +62,7 @@
 
             <br>
 
-            <a id="updateButton" class="btn btn-info" type="button" href="{% url 'client:update-subscription' SubscriptionID %}">
+            <a id="updateButton" class="btn btn-info w-100 p-2" type="button" href="{% url 'client:update-subscription' SubscriptionID %}">
                 Update subscription
             </a>
 
@@ -79,7 +81,7 @@
 
             <br>
 
-            <a id="deleteButton" class="btn btn-danger" type="button" href="{% url 'client:delete-subscription' SubscriptionID %}">
+            <a id="deleteButton" class="btn btn-danger w-100 p-2" type="button" href="{% url 'client:delete-subscription' SubscriptionID %}">
                 Delete subscription
             </a>
 
@@ -96,7 +98,11 @@
     <div class="container bg-white shadow-md p-5 form-layout">
         <h3>Account Deletion</h3>
         
-        <br>
+        <hr>
+
+        <p>
+            Proceed below to delete your account:
+        </p>
 
         <a class="text-danger" href="{% url 'client:delete-account' %}">Delete your account</a>
     </div>

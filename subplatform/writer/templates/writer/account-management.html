@@ -12,8 +12,10 @@
             {% csrf_token %}
             
             {{ UserUpdateForm|crispy }}
+
+            <br>
             
-            <input class="btn btn-success" type="submit" value="Update Details">
+            <input class="btn btn-success w-100" type="submit" value="Update Details">
         </form>
     </div>
 
@@ -21,6 +23,12 @@
 
     <div class="container bg-white shadow-md p-5 form-layout">
         <h3>Account Deletion</h3>
+
+        <hr>
+
+        <p>
+            Proceed below to delete your account
+        </p>
         
         <br>
 

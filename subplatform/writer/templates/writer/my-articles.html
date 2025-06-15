@@ -28,8 +28,11 @@
 
         <hr>
 
-        <a href="{% url 'writer:update-article' article.id %}" class="btn btn-success">Update Article</a>
-        <a href="{% url 'writer:delete-article' article.id %}" class="btn btn-danger">Delete Article</a>
+        <a href="{% url 'writer:update-article' article.id %}" class="btn btn-info w-100 p-2">Update Article</a>
+
+        <br><br>
+
+        <a href="{% url 'writer:delete-article' article.id %}" class="btn btn-danger w-100 p-2">Delete Article</a>
     </div>
     {% endfor %}
 

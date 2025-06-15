@@ -7,13 +7,19 @@
     <br>
     <div class="container bg-white shadow-md p-5 form-layout">
         <h3>Update article</h3>
-        <p>You may update your article below: </p>
+        
+        <hr>
+
+        <p>As a writer you can update your articleS accordingly: </p>
+
         <form method="post" autocomplete="off">
             {% csrf_token %}
             
             {{ UpdateArticleForm|crispy }}
+
+            <br>
             
-            <input class="btn btn-success" type="submit" value="Update Article">
+            <input class="btn btn-success w-100" type="submit" value="Update Article">
         </form>
     </div>
 {% endblock content %}
