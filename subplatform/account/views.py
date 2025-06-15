@@ -17,7 +17,7 @@ def register(request):
         if form.is_valid():
             form.save()
 
-            return redirect('account:my-login')
+            return redirect('my-login')
         
     context = {'RegisterForm': form}
     return render(request, 'account/register.html', context=context)
@@ -48,4 +48,4 @@ def my_login(request):
 def user_logout(request):
     logout(request)
     
-    return redirect('account:my-login')
+    return redirect('my-login')

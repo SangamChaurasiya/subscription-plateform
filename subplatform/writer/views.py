@@ -6,12 +6,12 @@ from .models import Article
 from account.models import CustomUser
 
 
-@login_required(login_url='account:my-login')
+@login_required(login_url='my-login')
 def writer_dashboard(request):
     return render(request, 'writer/writer-dashboard.html')
 
 
-@login_required(login_url='account:my-login')
+@login_required(login_url='my-login')
 def create_article(request):
     form = ArticleForm()
 
@@ -27,7 +27,7 @@ def create_article(request):
     return render(request, 'writer/create-article.html', context=context)
 
 
-@login_required(login_url='account:my-login')
+@login_required(login_url='my-login')
 def my_articles(request):
     current_user = request.user.id
 
@@ -38,7 +38,7 @@ def my_articles(request):
     return render(request, 'writer/my-articles.html', context=context)
 
 
-@login_required(login_url='account:my-login')
+@login_required(login_url='my-login')
 def update_article(request, pk):
     current_user = request.user.id
 
@@ -62,7 +62,7 @@ def update_article(request, pk):
     return render(request, 'writer/update-article.html', context=context)
 
 
-@login_required(login_url='account:my-login')
+@login_required(login_url='my-login')
 def delete_article(request, pk):
     current_user = request.user.id
 
@@ -82,7 +82,7 @@ def delete_article(request, pk):
     return render(request, 'writer/delete-article.html', context=context)
 
 
-@login_required(login_url='account:my-login')
+@login_required(login_url='my-login')
 def account_management(request):
     form = UpdateUserForm(instance=request.user)
 
@@ -99,12 +99,12 @@ def account_management(request):
     return render(request, 'writer/account-management.html', context=context)
 
 
-@login_required(login_url='account:my-login')
+@login_required(login_url='my-login')
 def delete_account(request):
     if request.method == "POST":
         deleteUser = CustomUser.objects.get(email=request.user)
         deleteUser.delete()
 
-        return redirect('account:my-login')
+        return redirect('my-login')
     
     return render(request, 'writer/delete-account.html')
