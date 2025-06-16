@@ -22,4 +22,10 @@ urlpatterns = [
     
     # 4 - Show a success message stating that our password was changed
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name="account/password-reset-complete.html"), name='password_reset_complete'),
+
+    # Email Verification
+    path('email-verification/<str:uidb64>/<str:token>/', views.email_verification, name='email-verification'),
+    path('email-verification-sent', views.email_verification_sent, name='email-verification-sent'),
+    path('email-verification-success', views.email_verification_success, name='email-verification-success'),
+    path('email-verification-failed', views.email_verification_failed, name='email-verification-failed'),
 ]
