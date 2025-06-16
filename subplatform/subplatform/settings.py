@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
 
+    # App for handling the cloud storages
+    'storages',
+
     'account',
     'writer',
     'client',
@@ -148,3 +151,25 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER") # GMAIL email address
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD") # App Password
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool)
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+
+
+# Amazon S3 Configurations
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID') # Enter your AWS Access Key ID Here
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY') # Enter your AWS Secret Access Key ID Here
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME') # Enter your S3 bucket name here
+
+STORAGES = {
+
+    # Media file(image) management
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+    },
+
+    # CSS and JS file management
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+    },
+}
+
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_FILE_OVERWRITE = False
